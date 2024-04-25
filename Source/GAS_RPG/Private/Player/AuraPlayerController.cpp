@@ -34,8 +34,16 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	// 绑定输入Acion
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -51,5 +59,28 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	// 鼠标碰撞通道
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;
+	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+
+	// 当前Actor不为空，高亮
+	if (ThisActor != nullptr)
+	{
+		ThisActor->HighlightActor();
+	}
+
+	// 上一个Actor不为空且不等于当前Actor，关闭高亮
+	if (LastActor != nullptr && LastActor != ThisActor)
+	{
+		LastActor->UnHighlightActor();
 	}
 }
