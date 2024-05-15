@@ -16,9 +16,17 @@ class GAS_RPG_API AEnemyCharacter : public AAuraCharacterBase,public IEnemyInter
 	GENERATED_BODY()
 
 public:
+
+	AEnemyCharacter();
+
+	//** enemy interface */
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+	//** end enemy interface */
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
+	
+protected:
+	virtual void BeginPlay() override;
 };
