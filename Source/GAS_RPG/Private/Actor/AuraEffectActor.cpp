@@ -27,6 +27,7 @@ void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		// TODO: 由于获取的到 AuraAttributeSet 是一个常量，不能更改值，现在用 const_cast 解除常量，后面再过来进行规范
 		UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
 		MutableAuraAttributeSet->SetHealth(MutableAuraAttributeSet->GetHealth() + 25.f);
+		MutableAuraAttributeSet->SetMana(MutableAuraAttributeSet->GetMana() + 25.f);
 		
 		Destroy();
 	}
