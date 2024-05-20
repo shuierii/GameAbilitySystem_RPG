@@ -31,10 +31,10 @@ void UOverlayWidgetController::BindCallbacksToDependcies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute())
 	                      .AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
 	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute())
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute())
 	                      .AddUObject(this, &UOverlayWidgetController::ManaChanged);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute())
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
 	                      .AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 }
 
