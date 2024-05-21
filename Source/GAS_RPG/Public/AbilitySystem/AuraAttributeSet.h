@@ -13,6 +13,36 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+USTRUCT()
+struct FEffectProperties
+{
+	GENERATED_BODY()
+
+	FEffectProperties()
+	{
+	}
+
+	FGameplayEffectContextHandle EffectContextHandle;
+
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+	UPROPERTY()
+	AActor* SourceAvatarActor = nullptr;
+	UPROPERTY()
+	AController* SourceController = nullptr;
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+	UPROPERTY()
+	AActor* TargetAvatarActor = nullptr;
+	UPROPERTY()
+	AController* TargetController = nullptr;
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+};
+
 /**
  * 
  */
@@ -23,7 +53,12 @@ class GAS_RPG_API UAuraAttributeSet : public UAttributeSet
 
 public:
 	UAuraAttributeSet();
+	// 服务端到客户端的复制通知	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	// 设置属性值范围，值变化前
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	// 改变属性后
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") // 复制通知
 	FGameplayAttributeData Health;
@@ -52,4 +87,7 @@ public:
 
 	UFUNCTION()
 	void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
+
+private:
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const;
 };
