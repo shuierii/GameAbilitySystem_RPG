@@ -20,5 +20,6 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 private:
-	void InitAbilityActorInfo();
+	// 依赖设置
+	virtual void InitAbilityActorInfo() override;
 };
