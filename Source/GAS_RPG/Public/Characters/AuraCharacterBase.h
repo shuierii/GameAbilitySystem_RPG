@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "GameFramework/Character.h"
 #include "AuraCharacterBase.generated.h"
 
@@ -22,7 +23,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	void InitializeMainAttributes() const;
+	
 	UPROPERTY(EditAnywhere, Category="Characters")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
@@ -31,6 +33,9 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultMainAttributes;
 
 private:
 	virtual void InitAbilityActorInfo();
