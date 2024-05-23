@@ -65,8 +65,17 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	FEffectProperties Properties;
 	SetEffectProperties(Data, Properties);
-
 	// Properties 使用这些属性进行战斗或者其他机制的信息获取
+
+	// 修正属性值不超过最大值
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
 }
 
 void UAuraAttributeSet::OnRep_Health(FGameplayAttributeData& OldHealth) const
