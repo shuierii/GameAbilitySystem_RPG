@@ -25,19 +25,44 @@ void UOverlayWidgetController::BindCallbacksToDependcies()
 
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 
-	// AuraAttributeSet->GetHealthAttribute() 在GET/SET宏定义上
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute())
-	                      .AddUObject(this, &UOverlayWidgetController::HealthChanged);
+	// 第一种绑定委托方式，AuraAttributeSet->GetHealthAttribute() 在GET/SET宏定义上
+	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute())
+	//                       .AddUObject(this, &UOverlayWidgetController::HealthChanged);
+	//
+	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute())
+	//                       .AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
+	//
+	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute())
+	//                       .AddUObject(this, &UOverlayWidgetController::ManaChanged);
+	//
+	// AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
+	//                       .AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 
+	// 第二种绑定委托方式，匿名函数
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute())
+	                      .AddLambda([this](const FOnAttributeChangeData& Data)
+	                      {
+		                      OnHealthChanged.Broadcast(Data.NewValue);
+	                      });
+	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute())
-	                      .AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
+	                      .AddLambda([this](const FOnAttributeChangeData& Data)
+	                      {
+		                      OnMaxHealthChanged.Broadcast(Data.NewValue);
+	                      });
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute())
-	                      .AddUObject(this, &UOverlayWidgetController::ManaChanged);
+	                      .AddLambda([this](const FOnAttributeChangeData& Data)
+	                      {
+		                      OnManaChanged.Broadcast(Data.NewValue);
+	                      });
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
-	                      .AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
-
+	                      .AddLambda([this](const FOnAttributeChangeData& Data)
+	                      {
+		                      OnMaxManaChanged.Broadcast(Data.NewValue);
+	                      });
+	
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
 		/* lambda里面不能调用成员函数，需要在[]中捕获对象才能调用 */
 		[this](const FGameplayTagContainer& AssetTagsContainer)
