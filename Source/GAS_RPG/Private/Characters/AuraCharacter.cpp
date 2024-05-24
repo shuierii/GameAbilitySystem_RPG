@@ -58,5 +58,5 @@ void AAuraCharacter::InitAbilityActorInfo()
 	}
 
 	// 初始化角色默认属性数据
-	InitializeMainAttributes();
+	InitializeDefautAttributes();
 }
