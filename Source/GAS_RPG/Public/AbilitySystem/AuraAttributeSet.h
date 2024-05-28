@@ -43,6 +43,16 @@ struct FEffectProperties
 	ACharacter* TargetCharacter = nullptr;
 };
 
+/*
+ * 静态函数指针模板
+ * 具体转泛型 TBaseStaticDelegateInstance<FGameplayAttribute(), FDefaultDelegateUserPolicy>::FFuncPtr;
+ * 模板使用例子
+ * TStaticFuncPtr<float(int32,int32,float)>
+ * 函数为 static float RandomFunction(int32 I, int32 I2, float F){return 0.f;} 
+ */
+template <class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 /**
  * 
  */
@@ -60,10 +70,13 @@ public:
 	// 改变属性后
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
+
 	/*
 	 * Main Attribute
 	 */
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Main Attributes") // 复制通知
+	UPROPERTY
+	(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Main Attributes") // 复制通知
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Strength);
 
@@ -165,7 +178,7 @@ public:
 
 	UFUNCTION()
 	void OnRep_HealthRegeneration(FGameplayAttributeData& OldHealthRegeneration) const;
-	
+
 	UFUNCTION()
 	void OnRep_ManaRegeneration(FGameplayAttributeData& OldManaRegeneration) const;
 

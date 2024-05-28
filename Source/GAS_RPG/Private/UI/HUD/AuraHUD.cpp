@@ -34,9 +34,26 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
 		// UI控制器注册委托
 		OverlayWidgetController->BindCallbacksToDependcies();
-		
+
 		return OverlayWidgetController;
 	}
 
 	return OverlayWidgetController;
+}
+
+UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams)
+{
+	if (AttributeMenuWidgetController == nullptr)
+	{
+		// 创建UI控制器
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+		// 设置UI控制器参数
+		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
+		// UI控制器注册委托
+		AttributeMenuWidgetController->BindCallbacksToDependcies();
+
+		return AttributeMenuWidgetController;
+	}
+
+	return AttributeMenuWidgetController;
 }
