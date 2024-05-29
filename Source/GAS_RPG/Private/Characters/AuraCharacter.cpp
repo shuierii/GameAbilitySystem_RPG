@@ -28,6 +28,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
 	// 初始化服务端的actor对象
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
@@ -52,7 +53,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	// 绑定委托
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-
+	
 	// 初始化HUD
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{

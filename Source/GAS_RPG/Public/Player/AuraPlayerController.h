@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputMappingContext.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
 #include "Interaction/EnemyInterface.h"
@@ -39,10 +40,15 @@ private:
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
 
-	UPROPERTY()
-	TObjectPtr<UAuraInputConfig> InputConfig;
-
 	void AbilityInputTagPressed(FGameplayTag GameplayTag);
 	void AbilityInputTagReleased(FGameplayTag GameplayTag);
 	void AbilityInputTagHeld(FGameplayTag GameplayTag);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UAuraAbilitySystemComponent* GetASC();
 };
