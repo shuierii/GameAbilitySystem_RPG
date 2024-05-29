@@ -40,6 +40,10 @@ void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 	AbilitySystemComponent.Get()->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), AbilitySystemComponent);
 }
 
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+}
+
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
 }

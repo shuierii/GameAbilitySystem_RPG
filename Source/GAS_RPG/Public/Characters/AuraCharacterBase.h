@@ -28,6 +28,8 @@ protected:
 	void InitializeDefautAttributes();
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level);
 
+	void AddCharacterAbilities();
+
 	UPROPERTY(EditAnywhere, Category="Characters")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
@@ -45,7 +47,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
-	
+
 private:
 	virtual void InitAbilityActorInfo();
+
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

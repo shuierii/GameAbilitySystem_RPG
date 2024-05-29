@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputMappingContext.h"
 #include "GameFramework/PlayerController.h"
+#include "Input/AuraInputConfig.h"
 #include "Interaction/EnemyInterface.h"
 #include "AuraPlayerController.generated.h"
 
@@ -21,6 +22,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	// 绑定输入Action
 	virtual void SetupInputComponent() override;
 	virtual void PlayerTick(float DeltaTime) override;
 
@@ -36,4 +38,11 @@ private:
 
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
+
+	UPROPERTY()
+	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	void AbilityInputTagPressed(FGameplayTag GameplayTag);
+	void AbilityInputTagReleased(FGameplayTag GameplayTag);
+	void AbilityInputTagHeld(FGameplayTag GameplayTag);
 };
