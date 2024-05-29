@@ -7,6 +7,8 @@
 #include "AuraGameplayTags.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "Input/AuraInputComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
@@ -53,6 +55,8 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
+
+	AutoRun();
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -105,8 +109,44 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag GameplayTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagReleased(GameplayTag);
+	if (!GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	{
+		if (GetASC() == nullptr) return;
+		GetASC()->AbilityInputTagReleased(GameplayTag);
+		return;
+	}
+
+	if (bTargeting)
+	{
+		if (GetASC() == nullptr) return;
+		GetASC()->AbilityInputTagReleased(GameplayTag);
+	}
+	else
+	{
+		APawn* ControlledPawn = GetPawn<APawn>();
+		// 长按时间少于响应时间
+		if (ControlledPawn && FollowTime <= ShortPressThreshold)
+		{
+			// 获得角色到目标点的导航路径
+			UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination);
+			if (NavPath)
+			{
+				// 路径平滑
+				Spline->ClearSplinePoints();
+				for (auto PointLoc : NavPath->PathPoints)
+				{
+					// 保存路径点
+					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+					// 绘制路径 ，客户端中显示需要在项目设置导航中勾选客户端导航
+					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+				}
+				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1]; // 最后一个点作为目标点
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
@@ -135,7 +175,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
 		if (APawn* ControlledPawn = GetPawn<APawn>())
 		{
 			const FVector Direction = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-			ControlledPawn->AddMovementInput(Direction, 1.0f);
+			ControlledPawn->AddMovementInput(Direction);
 		}
 	}
 }
@@ -148,4 +188,23 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 	}
 
 	return AuraAbilitySystemComponent;
+}
+
+void AAuraPlayerController::AutoRun()
+{
+	if (!bAutoRunning) return;;
+
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		const FVector LocationOnSline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSline, ESplineCoordinateSpace::World);
+		ControlledPawn->AddMovementInput(Direction);
+
+		// 移动距离小于规定距离则视为到大目标点，停止自动移动
+		const float DistanceToDestination = (LocationOnSline - CachedDestination).Length();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)
+		{
+			bAutoRunning = false;
+		}
+	}
 }

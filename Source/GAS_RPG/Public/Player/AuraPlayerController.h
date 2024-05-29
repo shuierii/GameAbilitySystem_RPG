@@ -55,7 +55,7 @@ private:
 
 	/** 鼠标移动 */
 	FVector CachedDestination = FVector::ZeroVector;
-	float FollowTime = 0.f;
+	float FollowTime = 0.f;	// 跟鼠标时间
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
 	bool bTargeting = false;	// 是否选中对象（如NPC），选中则高亮，非选中则移动
@@ -65,5 +65,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
+
+	void AutoRun();
 	/** End */
 };
