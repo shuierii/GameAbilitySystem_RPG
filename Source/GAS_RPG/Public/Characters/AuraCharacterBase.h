@@ -48,6 +48,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
+	UPROPERTY(EditAnywhere, Category="Characters")
+	FName WeaponTipSocketName;
+
+	virtual FVector GetCombatSocketLocation() override;
+
 private:
 	virtual void InitAbilityActorInfo();
 
