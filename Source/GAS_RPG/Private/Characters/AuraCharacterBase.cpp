@@ -14,6 +14,7 @@ AAuraCharacterBase::AAuraCharacterBase()
 
 	// 忽略相机遮挡
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
