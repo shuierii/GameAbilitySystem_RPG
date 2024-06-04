@@ -37,10 +37,17 @@ private:
 
 	void Move(const FInputActionValue& InputActionValue);
 	void CursorTrace();
-	FHitResult CursorHit;	// 鼠标碰撞
+	FHitResult CursorHit; // 鼠标碰撞
 
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> ShiftAction;
+	
+	void ShiftPressed() { bShiftPressed = true; }
+	void ShiftReleased() { bShiftPressed = false; }
+	bool bShiftPressed = false;
 
 	void AbilityInputTagPressed(FGameplayTag GameplayTag);
 	void AbilityInputTagReleased(FGameplayTag GameplayTag);
