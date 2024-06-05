@@ -49,6 +49,12 @@ int32 AEnemyCharacter::GetPlayerLevel()
 	return Level;
 }
 
+void AEnemyCharacter::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+}
+
 void AEnemyCharacter::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	// 受到伤害时候停止行动

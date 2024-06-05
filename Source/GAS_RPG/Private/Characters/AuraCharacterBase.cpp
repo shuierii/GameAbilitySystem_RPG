@@ -16,9 +16,9 @@ AAuraCharacterBase::AAuraCharacterBase()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
-	
+
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -32,6 +32,27 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
 {
 	return HitReactMontage;
+}
+
+void AAuraCharacterBase::Die()
+{
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	MulticastHandleDeath();
+}
+
+void AAuraCharacterBase::MulticastHandleDeath_Implementation()
+{
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+
+	// 尸体不会挡住别人
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AAuraCharacterBase::BeginPlay()

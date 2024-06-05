@@ -24,6 +24,12 @@ public:
 
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 
+	virtual void Die() override;
+
+	// 多播RPC
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath();
+
 protected:
 	virtual void BeginPlay() override;
 	// 初始化角色属性值
