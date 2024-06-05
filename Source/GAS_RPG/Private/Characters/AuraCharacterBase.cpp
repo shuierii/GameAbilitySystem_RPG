@@ -53,6 +53,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 
 	// 尸体不会挡住别人
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Dissolve();
 }
 
 void AAuraCharacterBase::BeginPlay()
@@ -87,6 +88,23 @@ FVector AAuraCharacterBase::GetCombatSocketLocation()
 {
 	check(Weapon)
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
+void AAuraCharacterBase::Dissolve()
+{
+	if (IsValid(DissolveMaterialInstance))
+	{
+		UMaterialInstanceDynamic* DynamicInst = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DynamicInst);
+		StartDissolveTimeline(DynamicInst);
+	}
+
+	if (IsValid(WeaponDissolveMaterialInstance))
+	{
+		UMaterialInstanceDynamic* DynamicInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		Weapon->SetMaterial(0, DynamicInst);
+		StartWeaponDissolveTimeline(DynamicInst);
+	}
 }
 
 void AAuraCharacterBase::InitAbilityActorInfo()
