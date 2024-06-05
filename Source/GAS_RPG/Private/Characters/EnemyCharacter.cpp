@@ -4,6 +4,7 @@
 #include "Characters/EnemyCharacter.h"
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "GAS_RPG/GAS_RPG.h"
 
@@ -78,11 +79,16 @@ void AEnemyCharacter::BeginPlay()
 	}
 }
 
+void AEnemyCharacter::InitializeDefaultAttributes()
+{
+	UAuraAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
+}
+
 void AEnemyCharacter::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	// 初始化角色默认属性数据
-	InitializeDefautAttributes();
+	InitializeDefaultAttributes();
 }

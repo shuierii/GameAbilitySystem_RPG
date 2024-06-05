@@ -25,7 +25,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	// 初始化角色属性值
-	void InitializeDefautAttributes();
+	virtual  void InitializeDefaultAttributes();
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level);
 
 	void AddCharacterAbilities();

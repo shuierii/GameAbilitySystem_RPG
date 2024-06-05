@@ -34,7 +34,7 @@ void AAuraCharacterBase::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AAuraCharacterBase::InitializeDefautAttributes()
+void AAuraCharacterBase::InitializeDefaultAttributes()
 {
 	ApplyEffectToSelf(DefaultMainAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
