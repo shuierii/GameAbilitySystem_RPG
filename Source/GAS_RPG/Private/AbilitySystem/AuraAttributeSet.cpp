@@ -110,6 +110,27 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
+
+	// 伤害计算和死亡判断
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const float LocalIncomingDamage = GetIncomingDamage();
+		SetIncomingDamage(0.f);
+		if (LocalIncomingDamage > 0.f)
+		{
+			const float NewHealth = GetHealth() - LocalIncomingDamage;
+			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+
+			const bool bFatal = NewHealth<=0.f;
+			if(!bFatal)
+			{
+				// 受击反应能力激活
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+				Properties.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
+		}
+	}
 }
 
 void UAuraAttributeSet::OnRep_Strength(FGameplayAttributeData& OldStrength) const
