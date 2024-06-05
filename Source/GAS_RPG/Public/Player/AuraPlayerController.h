@@ -9,6 +9,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/Widget/DamageTextComponent.h"
 #include "AuraPlayerController.generated.h"
 
 /**
@@ -21,6 +22,9 @@ class GAS_RPG_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 
 protected:
 	virtual void BeginPlay() override;
@@ -44,7 +48,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ShiftAction;
-	
+
 	void ShiftPressed() { bShiftPressed = true; }
 	void ShiftReleased() { bShiftPressed = false; }
 	bool bShiftPressed = false;
@@ -76,4 +80,7 @@ private:
 
 	void AutoRun();
 	/** End */
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };
