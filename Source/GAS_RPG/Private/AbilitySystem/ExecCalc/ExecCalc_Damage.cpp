@@ -4,6 +4,7 @@
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -112,6 +113,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCo;
 	const bool bCtritical = FMath::RandRange(1, 100) < EffectiveCriticalHitChance;
 	if (bCtritical) Damage = Damage * 2.0f + SourceCriticalHitDamage;
+
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	UAuraAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bBlocked);
+	UAuraAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCtritical);
 
 	// 穿甲系数
 	FRealCurve* ArmorPenetrationCurve = CharacterClassInfo->DamageCalcCo->FindCurve(FName("ArmorPenetration"), FString());
