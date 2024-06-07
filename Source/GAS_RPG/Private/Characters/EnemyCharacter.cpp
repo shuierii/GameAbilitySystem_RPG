@@ -20,6 +20,12 @@ AEnemyCharacter::AEnemyCharacter()
 	AbilitySystemComponent->SetIsReplicated(true); // 可以复制
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal); // 客户端到服务端的复制模式
 
+	// 移动转向
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
@@ -31,7 +37,7 @@ void AEnemyCharacter::PossessedBy(AController* NewController)
 
 	if (!HasAuthority())return;
 	AuraAIController = Cast<AAuraAIController>(NewController);
-	
+
 	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	AuraAIController->RunBehaviorTree(BehaviorTree);
 }
