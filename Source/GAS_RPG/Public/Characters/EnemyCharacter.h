@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "AI/AuraAIController.h"
 #include "Characters/AuraCharacterBase.h"
 #include "Components/WidgetComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EnemyCharacter.generated.h"
+
+class UBehaviorTree;
 
 /**
  * 
@@ -20,7 +23,7 @@ class GAS_RPG_API AEnemyCharacter : public AAuraCharacterBase, public IEnemyInte
 
 public:
 	AEnemyCharacter();
-
+	virtual void PossessedBy(AController* NewController) override;
 	//** enemy interface */
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
@@ -50,7 +53,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	float LifeSpan = 5.f;
-	
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -64,6 +67,12 @@ protected:
 	TObjectPtr<UWidgetComponent> HealthBar;
 
 	virtual void InitializeDefaultAttributes() override;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AAuraAIController> AuraAIController;
 
 private:
 	virtual void InitAbilityActorInfo() override;
