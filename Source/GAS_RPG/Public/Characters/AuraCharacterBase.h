@@ -47,15 +47,6 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
-	TSubclassOf<UGameplayEffect> DefaultMainAttributes;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
-	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
-	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
-
 	UPROPERTY(EditAnywhere, Category="Characters")
 	FName WeaponTipSocketName;
 

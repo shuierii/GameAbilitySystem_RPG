@@ -39,6 +39,14 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+void AAuraCharacter::InitializeDefaultAttributes()
+{
+	ApplyEffectToSelf(DefaultMainAttributes, 1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
+	ApplyEffectToSelf(DefaultResistanceAttributes, 1.f);
+	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
 int32 AAuraCharacter::GetPlayerLevel()
 {
 	return GetPlayerState<AAuraPlayerState>()->GetPlayerLevel();
@@ -53,7 +61,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	// 绑定委托
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-	
+
 	// 初始化HUD
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
