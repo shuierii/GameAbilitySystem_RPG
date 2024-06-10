@@ -50,7 +50,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Characters")
 	FName WeaponTipSocketName;
 
-	virtual FVector GetCombatSocketLocation() override;
+	virtual FVector GetCombatSocketLocation_Implementation() override;
 
 	/** 溶解 */
 	void Dissolve();
