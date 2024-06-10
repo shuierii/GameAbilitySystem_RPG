@@ -38,6 +38,8 @@ void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	MulticastHandleDeath();
+
+	bDead = true;
 }
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
@@ -63,7 +65,6 @@ void AAuraCharacterBase::BeginPlay()
 
 void AAuraCharacterBase::InitializeDefaultAttributes()
 {
-	
 }
 
 void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level)
@@ -86,6 +87,16 @@ FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon)
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
+bool AAuraCharacterBase::IsDead_Implementation()
+{
+	return bDead;
+}
+
+AActor* AAuraCharacterBase::GetAvatar_Implementation()
+{
+	return this;
 }
 
 void AAuraCharacterBase::Dissolve()
