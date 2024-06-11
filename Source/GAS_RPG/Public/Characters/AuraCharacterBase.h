@@ -46,7 +46,7 @@ protected:
 
 	void AddCharacterAbilities();
 
-	UPROPERTY(EditAnywhere, Category="Characters")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Characters")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY()
