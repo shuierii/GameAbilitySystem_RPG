@@ -4,6 +4,7 @@
 #include "Characters//AuraCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
@@ -83,10 +84,18 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(StartupAbilities);
 }
 
-FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation()
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon)
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().Montage_Attack_Weapon))
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+
+	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().Montage_Attack_RightHand))
+		return Weapon->GetSocketLocation(RightHandTipSocketName);
+
+	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().Montage_Attack_LeftHand))
+		return Weapon->GetSocketLocation(LeftHandTipSocketName);
+
+	return FVector();
 }
 
 bool AAuraCharacterBase::IsDead_Implementation()
@@ -97,6 +106,11 @@ bool AAuraCharacterBase::IsDead_Implementation()
 AActor* AAuraCharacterBase::GetAvatar_Implementation()
 {
 	return this;
+}
+
+TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
 }
 
 void AAuraCharacterBase::Dissolve()

@@ -29,10 +29,14 @@ public:
 	/** ICombatInterface */
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual void Die() override;
-	virtual FVector GetCombatSocketLocation_Implementation() override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual bool IsDead_Implementation() override;
 	virtual AActor* GetAvatar_Implementation() override;
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	/** End */
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TArray<FTaggedMontage> AttackMontages;
 
 protected:
 	virtual void BeginPlay() override;
@@ -53,6 +57,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Characters")
 	FName WeaponTipSocketName;
+
+	UPROPERTY(EditAnywhere, Category="Characters")
+	FName RightHandTipSocketName;
+
+	UPROPERTY(EditAnywhere, Category="Characters")
+	FName LeftHandTipSocketName;
 
 	/** 溶解 */
 	void Dissolve();
