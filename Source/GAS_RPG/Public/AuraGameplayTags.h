@@ -63,6 +63,7 @@ public:
 	FGameplayTag Montage_Attack_4;
 	
 	FGameplayTag Abilities_Attack;
+	FGameplayTag Abilities_Summon;
 	
 	FGameplayTag Effects_HitReact;
 
