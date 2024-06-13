@@ -8,6 +8,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GAS_RPG/GAS_RPG.h"
+#include "Kismet/GameplayStatics.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -39,12 +40,12 @@ void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	MulticastHandleDeath();
-
-	bDead = true;
 }
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());
+
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -57,6 +58,8 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	// 尸体不会挡住别人
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+
+	bDead = true;
 }
 
 void AAuraCharacterBase::BeginPlay()
@@ -94,6 +97,9 @@ FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGamepl
 
 	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().CombatSocket_LeftHand))
 		return Weapon->GetSocketLocation(LeftHandTipSocketName);
+
+	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().CombatSocket_Tail))
+		return Weapon->GetSocketLocation(TailTipSocketName);
 
 	return FVector();
 }

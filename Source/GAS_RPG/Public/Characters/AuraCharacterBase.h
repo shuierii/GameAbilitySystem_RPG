@@ -67,6 +67,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Characters")
 	FName LeftHandTipSocketName;
 
+	UPROPERTY(EditAnywhere, Category="Characters")
+	FName TailTipSocketName;
+
 	/** 溶解 */
 	void Dissolve();
 
@@ -87,6 +90,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UNiagaraSystem* BloodEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundBase* DeathSound;
+
 private:
 	virtual void InitAbilityActorInfo();
 
