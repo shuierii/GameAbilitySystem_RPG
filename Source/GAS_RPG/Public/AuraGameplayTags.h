@@ -65,6 +65,8 @@ public:
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_Fire_FireBolt;
+
+	FGameplayTag Cooldown_Fire_FireBolt;
 	
 	FGameplayTag Effects_HitReact;
 
