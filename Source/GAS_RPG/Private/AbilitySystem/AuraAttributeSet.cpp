@@ -129,35 +129,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	// 伤害计算和死亡判断
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
-		const float LocalIncomingDamage = GetIncomingDamage();
-		SetIncomingDamage(0.f);
-		if (LocalIncomingDamage > 0.f)
-		{
-			const float NewHealth = GetHealth() - LocalIncomingDamage;
-			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+		HandleIncomingDamage(Properties);
+	}
 
-			const bool bFatal = NewHealth <= 0.f;
-			if (bFatal)
-			{
-				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Properties.TargetAvatarActor);
-				if (CombatInterface)
-				{
-					CombatInterface->Die();
-				}
-			}
-			else
-			{
-				// 受击反应能力激活
-				FGameplayTagContainer TagContainer;
-				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-				Properties.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-			}
-		}
-
-		// 显示伤害悬浮UI
-		const bool bBlocked = UAuraAbilitySystemLibrary::IsBlockedHit(Properties.EffectContextHandle);
-		const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Properties.EffectContextHandle);
-		ShowFloatingText(Properties, LocalIncomingDamage, bBlocked, bCritical);
+	if (Data.EvaluatedData.Attribute == GetIncomingXPAttribute())
+	{
+		HandleIncomingXP(Properties);
 	}
 }
 
@@ -261,6 +238,47 @@ void UAuraAttributeSet::OnRep_PhysicalResistance(FGameplayAttributeData& OldPhys
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, PhysicalResistance, OldPhysicalResistance);
 }
 
+void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
+{
+	const float LocalIncomingDamage = GetIncomingDamage();
+	SetIncomingDamage(0.f);
+	if (LocalIncomingDamage > 0.f)
+	{
+		const float NewHealth = GetHealth() - LocalIncomingDamage;
+		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+
+		const bool bFatal = NewHealth <= 0.f;
+		if (bFatal)
+		{
+			ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
+			if (CombatInterface)
+			{
+				CombatInterface->Die();
+			}
+
+			SendXPEvent(Props);
+		}
+		else
+		{
+			// 受击反应能力激活
+			FGameplayTagContainer TagContainer;
+			TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+		}
+	}
+
+	// 显示伤害悬浮UI
+	const bool bBlocked = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+	const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+	ShowFloatingText(Props, LocalIncomingDamage, bBlocked, bCritical);
+}
+
+void UAuraAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
+{
+	const float LocalIncomingXP = GetIncomingXP();
+	SetIncomingXP(0.f);
+}
+
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const
 {
 	// Source 施加效果方 Target 当前AS拥有者
@@ -305,5 +323,21 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
+	}
+}
+
+void UAuraAttributeSet::SendXPEvent(const FEffectProperties& Props)
+{
+	if (Props.TargetCharacter->Implements<UCombatInterface>())
+	{
+		const int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(Props.TargetCharacter);
+		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
+		const int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
+
+		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;
+		Payload.EventMagnitude = XPReward;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Props.SourceCharacter, GameplayTags.Attributes_Meta_IncomingXP, Payload);
 	}
 }

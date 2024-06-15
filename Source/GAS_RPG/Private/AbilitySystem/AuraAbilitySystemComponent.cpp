@@ -29,6 +29,15 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 	AbilitiesGivenDelegate.Broadcast(this);
 }
 
+void UAuraAbilitySystemComponent::AddCharacterPassiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities)
+{
+	for (const auto AbilityClass : StartupPassiveAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag GameplayTag)
 {
 	if (!GameplayTag.IsValid()) return;
@@ -67,7 +76,7 @@ void UAuraAbilitySystemComponent::ForEachAbility(const FForEachAbility& Delegate
 	{
 		if (!Delegate.ExecuteIfBound(Spec))
 		{
-			UE_LOG(LogAura, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
+			// UE_LOG(LogAura, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
 		}
 	}
 }

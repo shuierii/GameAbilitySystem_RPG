@@ -20,6 +20,8 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	CharacterClass = ECharacterClass::Elementalist;
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
@@ -47,7 +49,7 @@ void AAuraCharacter::InitializeDefaultAttributes()
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 }
 
-int32 AAuraCharacter::GetPlayerLevel()
+int32 AAuraCharacter::GetPlayerLevel_Implementation()
 {
 	return GetPlayerState<AAuraPlayerState>()->GetPlayerLevel();
 }

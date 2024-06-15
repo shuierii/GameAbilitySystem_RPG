@@ -172,6 +172,10 @@ public:
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
 
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingXP);
+	
 	UFUNCTION()
 	void OnRep_Strength(FGameplayAttributeData& OldStrength) const;
 
@@ -233,6 +237,9 @@ public:
 	void OnRep_PhysicalResistance(FGameplayAttributeData& OldPhysicalResistance) const;
 
 private:
+	void HandleIncomingDamage(const FEffectProperties& Props);
+	void HandleIncomingXP(const FEffectProperties& Props);
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit);
+	void SendXPEvent(const FEffectProperties& Props);
 };

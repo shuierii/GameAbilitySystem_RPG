@@ -85,6 +85,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(StartupAbilities);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
@@ -145,6 +146,11 @@ int32 AAuraCharacterBase::GetMinionCount_Implementation()
 void AAuraCharacterBase::IncremenetMinionCount_Implementation(int32 Amount)
 {
 	MinionCount += Amount;
+}
+
+ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
 }
 
 void AAuraCharacterBase::Dissolve()

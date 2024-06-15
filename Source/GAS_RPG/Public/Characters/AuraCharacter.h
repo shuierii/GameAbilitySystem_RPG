@@ -21,7 +21,7 @@ public:
 	virtual void InitializeDefaultAttributes() override;
 	
 	//** combat interface */
-	virtual int32 GetPlayerLevel() override;
+	virtual int32 GetPlayerLevel_Implementation() override;
 	//** end combat interface */
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")

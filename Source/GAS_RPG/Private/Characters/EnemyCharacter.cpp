@@ -65,7 +65,7 @@ void AEnemyCharacter::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
-int32 AEnemyCharacter::GetPlayerLevel()
+int32 AEnemyCharacter::GetPlayerLevel_Implementation()
 {
 	return Level;
 }

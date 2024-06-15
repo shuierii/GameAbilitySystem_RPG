@@ -33,7 +33,7 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 		// 设置UI控制器参数
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
 		// UI控制器注册委托
-		OverlayWidgetController->BindCallbacksToDependcies();
+		OverlayWidgetController->BindCallbacksToDependencies();
 
 		return OverlayWidgetController;
 	}
@@ -50,7 +50,7 @@ UAttributeMenuWidgetController* AAuraHUD::GetAttributeMenuWidgetController(const
 		// 设置UI控制器参数
 		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
 		// UI控制器注册委托
-		AttributeMenuWidgetController->BindCallbacksToDependcies();
+		AttributeMenuWidgetController->BindCallbacksToDependencies();
 
 		return AttributeMenuWidgetController;
 	}

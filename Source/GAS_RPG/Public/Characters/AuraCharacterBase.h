@@ -38,6 +38,7 @@ public:
 	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual void IncremenetMinionCount_Implementation(int32 Amount) override;
+	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	/** End */
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -50,7 +51,7 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float level);
 
 	void AddCharacterAbilities();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Characters")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
@@ -71,6 +72,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Characters")
 	FName TailTipSocketName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	/** 溶解 */
 	void Dissolve();
@@ -105,6 +109,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
+	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 };

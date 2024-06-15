@@ -78,8 +78,6 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
 
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
@@ -90,7 +88,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluateParameters.SourceTags = SourceTags;
 	EvaluateParameters.TargetTags = TargetTags;
 
+	const int32 SourceLevel = ICombatInterface::Execute_GetPlayerLevel(SourceAvatar);
+	const int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(TargetAvatar);
+
 	// 开始计算  set by caller magnitude
+
 	float Damage = 0.f;
 
 	// 以下各种影响伤害的属性加入计算
@@ -112,7 +114,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 		float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTypeTag);
 		DamageTypeValue *= (100.f - Resistance) / 100.f;
-		
+
 		Damage += DamageTypeValue;
 	}
 
@@ -152,7 +154,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// 暴击抵抗系数
 	FRealCurve* CriticalHitResistanceCurve = CharacterClassInfo->DamageCalcCo->FindCurve(FName("CriticalHitResistance"), FString());
-	const float CriticalHitResistanceCo = CriticalHitResistanceCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	const float CriticalHitResistanceCo = CriticalHitResistanceCurve->Eval(SourceLevel);
 
 	// 如果暴击
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCo;
@@ -165,14 +167,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// 穿甲系数
 	FRealCurve* ArmorPenetrationCurve = CharacterClassInfo->DamageCalcCo->FindCurve(FName("ArmorPenetration"), FString());
-	const float ArmorPenetrationCo = ArmorPenetrationCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	const float ArmorPenetrationCo = ArmorPenetrationCurve->Eval(SourceLevel);
 
 	// 穿甲后的护甲剩余量
 	const float EffectiveArmor = TargetArmor *= (100 - SourceArmorPenetration * ArmorPenetrationCo) / 100.f;
 
 	// 护甲有效系数
 	FRealCurve* EffectiveArmorCurve = CharacterClassInfo->DamageCalcCo->FindCurve(FName("EffectiveArmor"), FString());
-	const float EffectiveArmorCo = EffectiveArmorCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float EffectiveArmorCo = EffectiveArmorCurve->Eval(TargetLevel);
 
 	// 最终伤害
 	Damage *= (100 - EffectiveArmor * EffectiveArmorCo) / 100.f;

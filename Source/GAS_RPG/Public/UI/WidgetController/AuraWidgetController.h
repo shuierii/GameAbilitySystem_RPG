@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+#include "Player/AuraPlayerController.h"
+#include "Player/AuraPlayerState.h"
 #include "UObject/NoExportTypes.h"
 #include "AuraWidgetController.generated.h"
 
@@ -44,7 +47,7 @@ class GAS_RPG_API UAuraWidgetController : public UObject
 public:
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 	virtual void BroadcastInitialValues();
-	virtual void BindCallbacksToDependcies();
+	virtual void BindCallbacksToDependencies();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
@@ -58,4 +61,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<AAuraPlayerController> AuraPlayerController;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<AAuraPlayerState> AuraPlayerState;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UAuraAttributeSet> AuraAttributeSet;
+	
+	AAuraPlayerController* GetAuraPC();
+	AAuraPlayerState* GetAuraPS();
+	UAuraAbilitySystemComponent* GetAuraASC();
+	UAuraAttributeSet* GetAuraAS();
 };
