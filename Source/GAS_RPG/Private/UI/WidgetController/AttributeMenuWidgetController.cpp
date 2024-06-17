@@ -19,6 +19,13 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 		Info.AttributeValue = pair.Value().GetNumericValue(AS);
 		AttributeInfoDelegate.Broadcast(Info);
 	}
+
+	// GetAuraPS()->OnAttributePointsChangedDelegate.AddLambda(
+	// 	[this](int32 Points)
+	// 	{
+	AttributePointsChangedDelegate.Broadcast(GetAuraPS()->GetAttributePoints());
+	// 	}
+	// );
 }
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
@@ -37,4 +44,10 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 			                      AttributeInfoDelegate.Broadcast(Info);
 		                      });
 	}
+}
+
+void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	AuraASC->UpgradeAttribute(AttributeTag);
 }
