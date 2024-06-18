@@ -8,6 +8,18 @@
 #include "AbilityInfo.generated.h"
 
 USTRUCT(BlueprintType)
+struct FAuraAbilityStatus
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<const UTexture2D> Icon = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<const UMaterialInterface> BgMaterial = nullptr;
+};
+
+USTRUCT(BlueprintType)
 struct FAuraAbilityInfo
 {
 	GENERATED_BODY()
@@ -29,7 +41,11 @@ struct FAuraAbilityInfo
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<const UMaterialInterface> BgMaterial = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TMap<FGameplayTag, FAuraAbilityStatus> StatusData;
 };
+
 
 /**
  * 

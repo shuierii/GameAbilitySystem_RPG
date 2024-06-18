@@ -30,11 +30,12 @@ public:
 	void AbilityInputTagHeld(FGameplayTag GameplayTag);
 	void ForEachAbility(const FForEachAbility& Delegate);
 
-	FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
-	FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
-	FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 
 	void UpgradeAttribute(const FGameplayTag& AttributeTag);
+
 protected:
 	// 客户端RPC，这样委托在服务器上广播，它将在服务器上被调用并在客户端执行，保证在服务端和客户端各自能接收委托并执行
 	UFUNCTION(Client, Reliable)
