@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/GameModeBase.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "AuraGameModeBase.generated.h"
 
 /**
@@ -18,4 +19,7 @@ class GAS_RPG_API AAuraGameModeBase : public AGameModeBase
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Character Info")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
 };

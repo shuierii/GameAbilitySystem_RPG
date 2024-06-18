@@ -70,6 +70,7 @@ public:
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_HitReact;
 	FGameplayTag Abilities_Fire_FireBolt;
+	FGameplayTag Abilities_Lightning_Electrocute;
 
 	FGameplayTag Abilities_Status_Locked;
 	FGameplayTag Abilities_Status_Eligible;
@@ -81,7 +82,8 @@ public:
 	FGameplayTag Abilities_Type_None;
 	
 	FGameplayTag Cooldown_Fire_FireBolt;
-
+	FGameplayTag Cooldown_Lightning_Electrocute;
+	
 	FGameplayTag Effects_HitReact;
 
 private:
