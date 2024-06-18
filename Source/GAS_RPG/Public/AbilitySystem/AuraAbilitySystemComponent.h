@@ -7,7 +7,7 @@
 #include "AuraAbilitySystemComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /* AssetTags */)
-DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven, UAuraAbilitySystemComponent*)
+DECLARE_MULTICAST_DELEGATE(FAbilitiesGiven)
 DECLARE_DELEGATE_OneParam(FForEachAbility, const FGameplayAbilitySpec&)
 /**
  * 
@@ -32,6 +32,7 @@ public:
 
 	FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 
 	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 protected:

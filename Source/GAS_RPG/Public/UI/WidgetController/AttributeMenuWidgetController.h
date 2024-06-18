@@ -18,9 +18,7 @@ class GAS_RPG_API UAttributeMenuWidgetController : public UAuraWidgetController
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues() override;
-	UFUNCTION(BlueprintCallable)
 	virtual void BindCallbacksToDependencies() override;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")

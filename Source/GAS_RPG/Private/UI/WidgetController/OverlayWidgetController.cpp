@@ -77,11 +77,11 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	{
 		if (AuraASC->bStartupAbilitiesGiven)
 		{
-			OnInitializeStartupAbilities(AuraASC);
+			BroadcastAbilityInfo();
 		}
 		else
 		{
-			AuraASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+			AuraASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
 		}
 
 		AuraASC->EffectAssetTags.AddLambda(
@@ -103,21 +103,6 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 				}
 			});
 	}
-}
-
-void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraASC)
-{
-	if (!AuraASC->bStartupAbilitiesGiven)return;
-
-	FForEachAbility Delegate;
-	Delegate.BindLambda([this,AuraASC](const FGameplayAbilitySpec& AbilitySpec)
-	{
-		FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AuraASC->GetAbilityTagFromSpec(AbilitySpec));
-		Info.InputTag = AuraASC->GetInputTagFromSpec(AbilitySpec);
-		AbilityInfoDelegate.Broadcast(Info);
-	});
-
-	AuraASC->ForEachAbility(Delegate);
 }
 
 void UOverlayWidgetController::OnXPChanged(int32 NewXP)

@@ -38,14 +38,16 @@ public:
 	FGameplayTag Attributes_Resistance_Physical;
 
 	FGameplayTag Attributes_Meta_IncomingXP;
-	
+
 	FGameplayTag InputTag_LMB;
 	FGameplayTag InputTag_RMB;
 	FGameplayTag InputTag_1;
 	FGameplayTag InputTag_2;
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
-
+	FGameplayTag InputTag_Passive_1;
+	FGameplayTag InputTag_Passive_2;
+	
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
 	FGameplayTag Damage_Lightning;
@@ -58,18 +60,23 @@ public:
 	FGameplayTag CombatSocket_RightHand;
 	FGameplayTag CombatSocket_LeftHand;
 	FGameplayTag CombatSocket_Tail;
-	
+
 	FGameplayTag Montage_Attack_1;
 	FGameplayTag Montage_Attack_2;
 	FGameplayTag Montage_Attack_3;
 	FGameplayTag Montage_Attack_4;
-	
+
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_Fire_FireBolt;
 
+	FGameplayTag Abilities_Status_Locked;
+	FGameplayTag Abilities_Status_Eligible;
+	FGameplayTag Abilities_Status_Unlocked;
+	FGameplayTag Abilities_Status_Equipped;
+
 	FGameplayTag Cooldown_Fire_FireBolt;
-	
+
 	FGameplayTag Effects_HitReact;
 
 private:
