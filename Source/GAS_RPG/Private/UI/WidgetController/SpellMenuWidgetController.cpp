@@ -28,6 +28,21 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 			AbilityInfoDelegate.Broadcast(Info);
 		}
 	});
+
+	// 更新技能点
+	GetAuraPS()->OnSpellPointsChangedDelegate.AddLambda([this](int32 SpellPoints)
+	{
+		SpellPointsChanged.Broadcast(SpellPoints);
+		// CurrentSpellPoints = SpellPoints;
+		//
+		// bool bEnableSpendPoints = false;
+		// bool bEnableEquip = false;
+		// ShouldEnableButtons(SelectedAbility.Status, CurrentSpellPoints, bEnableSpendPoints, bEnableEquip);
+		// FString Description;
+		// FString NextLevelDescription;
+		// GetAuraASC()->GetDescriptionsByAbilityTag(SelectedAbility.Ability, Description, NextLevelDescription);
+		// SpellGlobeSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip, Description, NextLevelDescription);
+	});
 }
 
 void USpellMenuWidgetController::BroadcastInitialValues()
@@ -35,4 +50,5 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 	Super::BroadcastInitialValues();
 
 	BroadcastAbilityInfo();
+	SpellPointsChanged.Broadcast(GetAuraPS()->GetSpellPoints());
 }

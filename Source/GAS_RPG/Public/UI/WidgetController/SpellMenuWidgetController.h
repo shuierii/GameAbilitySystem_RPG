@@ -17,4 +17,7 @@ class GAS_RPG_API USpellMenuWidgetController : public UAuraWidgetController
 public:
 	virtual void BindCallbacksToDependencies() override;
 	virtual void BroadcastInitialValues() override;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerStatChangedSignature SpellPointsChanged;
 };
