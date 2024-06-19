@@ -58,7 +58,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
 	FAbilityInfoSignature AbilityInfoDelegate;
-
+	
 	void BroadcastAbilityInfo();
 
 protected:

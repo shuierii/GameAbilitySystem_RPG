@@ -85,6 +85,8 @@ protected:
 
 	void OnXPChanged(int32 NewXP);
 
+	void OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status, const FGameplayTag& Slot, const FGameplayTag& PreviousSlot) const;
+
 private:
 	/** 委托执行回调函数 */
 	void HealthChanged(const FOnAttributeChangeData& Data) const;
