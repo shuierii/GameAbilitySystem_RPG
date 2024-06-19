@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraAbilityTypes.h"
 #include "GameplayEffectTypes.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
@@ -22,9 +23,11 @@ public:
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle; // 伤害效果信息，生成火球的时候携带
+	FDamageEffectParams DamageEffectParams; // 伤害效果信息，生成火球的时候携带
 
 protected:
+	UFUNCTION(BlueprintCallable)
+	virtual void OnHit();
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 

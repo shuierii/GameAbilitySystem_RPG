@@ -63,9 +63,7 @@ public:
 	FGameplayTag Damage_Lightning;
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
-
-	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistance;
-
+	
 	FGameplayTag CombatSocket_Weapon;
 	FGameplayTag CombatSocket_RightHand;
 	FGameplayTag CombatSocket_LeftHand;
@@ -96,6 +94,9 @@ public:
 	FGameplayTag Cooldown_Lightning_Electrocute;
 	
 	FGameplayTag Effects_HitReact;
+
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistance;
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
 
 private:
 	static FAuraGameplayTags GameplayTags;
