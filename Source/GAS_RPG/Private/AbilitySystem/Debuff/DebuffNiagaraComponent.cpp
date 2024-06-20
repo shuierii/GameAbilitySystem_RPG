@@ -20,7 +20,7 @@ void UDebuffNiagaraComponent::BeginPlay()
 	if (UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner()))
 	{
 		// 添加/移除标签之后开始执行
-		ASC->RegisterGameplayTagEvent(DebuffTag, EGameplayTagEventType::AnyCountChange).AddUObject(this, &UDebuffNiagaraComponent::DebuffTagChanged);
+		ASC->RegisterGameplayTagEvent(DebuffTag, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &UDebuffNiagaraComponent::DebuffTagChanged);
 	}
 	else if (CombatInterface)
 	{
