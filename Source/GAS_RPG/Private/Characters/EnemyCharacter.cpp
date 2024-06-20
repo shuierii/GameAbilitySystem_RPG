@@ -148,5 +148,10 @@ void AEnemyCharacter::InitAbilityActorInfo()
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	// 初始化角色默认属性数据
-	InitializeDefaultAttributes();
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();		
+	}
+	
+	OnAscRegistered.Broadcast(AbilitySystemComponent);
 }
