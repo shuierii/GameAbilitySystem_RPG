@@ -25,6 +25,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
 	FDamageEffectParams DamageEffectParams; // 伤害效果信息，生成火球的时候携带
 
+	UPROPERTY()
+	TObjectPtr<USceneComponent> HomingTargetSceneComponent;
+
 protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void OnHit();
