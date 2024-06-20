@@ -95,7 +95,7 @@ public:
 	
 	FGameplayTag Effects_HitReact;
 
-	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistance;
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
 
 private:
