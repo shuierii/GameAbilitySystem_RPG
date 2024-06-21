@@ -43,7 +43,7 @@ void UAuraAbilitySystemComponent::AddCharacterPassiveAbilities(const TArray<TSub
 	}
 }
 
-void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag GameplayTag)
+void UAuraAbilitySystemComponent::AbilityInputTagPressed(FGameplayTag GameplayTag)
 {
 	if (!GameplayTag.IsValid()) return;
 
@@ -51,7 +51,29 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag GameplayT
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(GameplayTag))
 		{
+			AbilitySpecInputPressed(AbilitySpec);
+			// 已激活
+			if (AbilitySpec.IsActive())
+			{
+				// 等待按下事件
+				InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
+			}
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag GameplayTag)
+{
+	if (!GameplayTag.IsValid()) return;
+
+	for (auto AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(GameplayTag) && AbilitySpec.IsActive())
+		{
 			AbilitySpecInputReleased(AbilitySpec);
+
+			// 等待释放事件
+			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
 		}
 	}
 }

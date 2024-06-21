@@ -35,6 +35,7 @@ public:
 	FActivatePassiveEffect ActivatePassiveEffect;
 	FDeactivatePassiveAbility DeactivatePassiveAbility;
 	
+	void AbilityInputTagPressed(FGameplayTag GameplayTag);
 	void AbilityInputTagReleased(FGameplayTag GameplayTag);
 	void AbilityInputTagHeld(FGameplayTag GameplayTag);
 	void ForEachAbility(const FForEachAbility& Delegate);
