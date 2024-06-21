@@ -78,6 +78,11 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+	{
+		return;
+	}
+
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -94,6 +99,16 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_CursorTrace))
+	{
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->UnHighlightActor();
+		LastActor = nullptr;
+		ThisActor = nullptr;
+
+		return;
+	}
+
 	// 鼠标碰撞通道
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 	if (!CursorHit.bBlockingHit) return;
@@ -116,17 +131,27 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag GameplayTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+	{
+		return;
+	}
+
 	if (GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		bTargeting = ThisActor ? true : false;
 		bAutoRunning = false;
 	}
 
-	if(GetASC()) GetASC()->AbilityInputTagPressed(GameplayTag);
+	if (GetASC()) GetASC()->AbilityInputTagPressed(GameplayTag);
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputReleased))
+	{
+		return;
+	}
+
 	if (GetASC() && !GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		GetASC()->AbilityInputTagReleased(GameplayTag);
@@ -161,9 +186,11 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 					bAutoRunning = true;
 				}
 			}
-
-			// 点击特效
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
+			if (GetASC() && !GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+			{
+				// 点击特效
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
+			}
 		}
 		FollowTime = 0.f;
 		bTargeting = false;
@@ -172,6 +199,11 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputHeld))
+	{
+		return;
+	}
+
 	if (!GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC() == nullptr) return;
