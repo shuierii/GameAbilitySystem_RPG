@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
 
@@ -124,9 +125,8 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag GameplayTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 {
-	if (!GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	if (GetASC() && !GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC() == nullptr) return;
 		GetASC()->AbilityInputTagReleased(GameplayTag);
 		return;
 	}
@@ -141,8 +141,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 		if (ControlledPawn && FollowTime <= ShortPressThreshold)
 		{
 			// 获得角色到目标点的导航路径
-			UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination);
-			if (NavPath)
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
 				// 路径平滑
 				Spline->ClearSplinePoints();
@@ -160,6 +159,9 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 					bAutoRunning = true;
 				}
 			}
+
+			// 点击特效
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
 		}
 		FollowTime = 0.f;
 		bTargeting = false;
