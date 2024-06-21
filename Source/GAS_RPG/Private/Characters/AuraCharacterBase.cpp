@@ -173,6 +173,11 @@ FOnDeathSignature& AAuraCharacterBase::GetOnDeathDelegate()
 	return OnDeathDelegate;
 }
 
+USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
+{
+	return Weapon;
+}
+
 void AAuraCharacterBase::Dissolve()
 {
 	if (IsValid(DissolveMaterialInstance))
