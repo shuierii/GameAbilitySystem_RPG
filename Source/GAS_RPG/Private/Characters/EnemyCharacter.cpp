@@ -37,11 +37,13 @@ void AEnemyCharacter::PossessedBy(AController* NewController)
 
 	if (!HasAuthority())return;
 	AuraAIController = Cast<AAuraAIController>(NewController);
-
-	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
-	AuraAIController->RunBehaviorTree(BehaviorTree);
-	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
-	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+	if (BehaviorTree)
+	{
+		AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+		AuraAIController->RunBehaviorTree(BehaviorTree);
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+	}
 }
 
 void AEnemyCharacter::HighlightActor()
@@ -150,8 +152,8 @@ void AEnemyCharacter::InitAbilityActorInfo()
 	// 初始化角色默认属性数据
 	if (HasAuthority())
 	{
-		InitializeDefaultAttributes();		
+		InitializeDefaultAttributes();
 	}
-	
+
 	OnAscRegistered.Broadcast(AbilitySystemComponent);
 }
