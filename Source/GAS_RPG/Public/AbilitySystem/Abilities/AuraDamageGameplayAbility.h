@@ -31,6 +31,9 @@ public:
 		bool bOverridePitch = false,
 		float PitchOverride = 0.f) const;
 
+	UFUNCTION(BlueprintPure)
+	float GetDamageAtLevel() const;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
