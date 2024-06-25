@@ -161,6 +161,9 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 	OnAscRegistered.Broadcast(AbilitySystemComponent);
 
+	// 注册晕倒标签添加和移除
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Debuff_Stun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AAuraCharacter::StunTagChanged);
+
 	// 初始化HUD
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
