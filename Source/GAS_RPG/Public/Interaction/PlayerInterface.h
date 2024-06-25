@@ -33,7 +33,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	int32 GetSpellPointsReward(int32 Level) const;
-	
+
 	UFUNCTION(BlueprintNativeEvent)
 	void AddToXP(int32 InXP);
 
@@ -51,7 +51,13 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	int32 GetSpellPoints() const;
-	
+
 	UFUNCTION(BlueprintNativeEvent)
 	void LevelUp();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowMagicCircle(UMaterialInterface* DecalMaterial = nullptr);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void HideMagicCircle();
 };

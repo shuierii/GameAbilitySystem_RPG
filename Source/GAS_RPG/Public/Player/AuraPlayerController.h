@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "NiagaraSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Actor/MagicCircle.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
@@ -27,6 +28,12 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit);
 
+	UFUNCTION(BlueprintCallable)
+	void ShowMagicCircle(UMaterialInterface* DecalMaterial = nullptr);
+
+	UFUNCTION(BlueprintCallable)
+	void HideMagicCircle();
+	
 protected:
 	virtual void BeginPlay() override;
 	// 绑定输入Action
@@ -85,6 +92,16 @@ private:
 	void AutoRun();
 	/** End */
 
+	/** 魔法阵Actor */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AMagicCircle> MagicCircleClass;
+
+	UPROPERTY()
+	TObjectPtr<AMagicCircle> MagicCircle;
+	
+	void UpdateMagicCircleLocation();	// 魔法阵跟随鼠标位置
+	/** End */
 };

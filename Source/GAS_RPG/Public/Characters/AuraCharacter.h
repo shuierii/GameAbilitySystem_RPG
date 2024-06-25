@@ -23,7 +23,7 @@ public:
 	virtual void OnRep_PlayerState() override;
 	virtual void InitializeDefaultAttributes() override;
 	
-	//** combat interface */
+	//** player interface */
 	virtual void AddToXP_Implementation(int32 InXP) override;
 	virtual void LevelUp_Implementation() override;
 	virtual int32 GetXP_Implementation() const override;
@@ -35,6 +35,8 @@ public:
 	virtual void AddToSpellPoints_Implementation(int32 InSpellPoints) override;
 	virtual int32 GetAttributePoints_Implementation() const override;
 	virtual int32 GetSpellPoints_Implementation() const override;
+	virtual void ShowMagicCircle_Implementation(UMaterialInterface* DecalMaterial) override;
+	virtual void HideMagicCircle_Implementation() override;
 	//** end combat interface */
 
 	//** combat interface */
