@@ -310,6 +310,7 @@ void UAuraAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 {
 	const float LocalIncomingXP = GetIncomingXP();
 	SetIncomingXP(0.f);
+
 	// Source Character is the owner, since GA_ListenForEvents applies GE_EventBasedEffect, adding to IncomingXP
 	if (Props.SourceCharacter->Implements<UPlayerInterface>() && Props.SourceCharacter->Implements<UCombatInterface>())
 	{
@@ -330,16 +331,16 @@ void UAuraAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 				SpellPointsReward += IPlayerInterface::Execute_GetSpellPointsReward(Props.SourceCharacter, CurrentLevel + i);
 				AttributePointsReward += IPlayerInterface::Execute_GetAttributePointsReward(Props.SourceCharacter, CurrentLevel + i);
 			}
-
+			
 			IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
 			IPlayerInterface::Execute_AddToSpellPoints(Props.SourceCharacter, SpellPointsReward);
-
+	
 			bTopOffHealth = true;
 			bTopOffMana = true;
-
+				
 			IPlayerInterface::Execute_LevelUp(Props.SourceCharacter);
 		}
-
+			
 		IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
 	}
 }
