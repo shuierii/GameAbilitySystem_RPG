@@ -78,8 +78,6 @@ public:
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_HitReact;
-	FGameplayTag Abilities_Fire_FireBolt;
-	FGameplayTag Abilities_Lightning_Electrocute;
 
 	FGameplayTag Abilities_Status_Locked;
 	FGameplayTag Abilities_Status_Eligible;
@@ -89,6 +87,11 @@ public:
 	FGameplayTag Abilities_Type_Offensive;
 	FGameplayTag Abilities_Type_Passive;
 	FGameplayTag Abilities_Type_None;
+	
+	FGameplayTag Abilities_Fire_FireBolt;
+	FGameplayTag Abilities_Fire_FireBlast;	
+	FGameplayTag Abilities_Lightning_Electrocute;
+	FGameplayTag Abilities_Arcane_ArcaneShards;
 
 	FGameplayTag Abilities_Passive_HaloOfProtection;
 	FGameplayTag Abilities_Passive_LifeSiphon;
