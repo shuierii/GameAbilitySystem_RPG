@@ -35,18 +35,19 @@ void AAuraFireBall::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void AAuraFireBall::OnHit()
 {
-	if (GetOwner())
-	{
-		FGameplayCueParameters CueParams;
-		CueParams.Location = GetActorLocation();
-		UGameplayCueManager::ExecuteGameplayCue_NonReplicated(GetOwner(), FAuraGameplayTags::Get().GameplayCue_FireBlast, CueParams);
-	}
-
-	if (LoopingSoundComponent)
-	{
-		LoopingSoundComponent->Stop();
-		LoopingSoundComponent->DestroyComponent();
-	}
+	Super::OnHit();
+	// if (GetOwner())
+	// {
+	// 	FGameplayCueParameters CueParams;
+	// 	CueParams.Location = GetActorLocation();
+	// 	UGameplayCueManager::ExecuteGameplayCue_NonReplicated(GetOwner(), FAuraGameplayTags::Get().GameplayCue_FireBlast, CueParams);
+	// }
+	//
+	// if (LoopingSoundComponent)
+	// {
+	// 	LoopingSoundComponent->Stop();
+	// 	LoopingSoundComponent->DestroyComponent();
+	// }
 	
-	bHit = true;
+	// bHit = true;
 }
