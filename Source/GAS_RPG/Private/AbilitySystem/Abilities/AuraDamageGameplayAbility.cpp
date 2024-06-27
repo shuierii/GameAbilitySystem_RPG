@@ -52,6 +52,7 @@ FDamageEffectParams UAuraDamageGameplayAbility::MakeDamageEffectParamsFromClassD
 		}
 	}
 
+	// 命中击退
 	if (bOverrideKnockbackDirection)
 	{
 		KnockbackDirectionOverride.Normalize();
@@ -64,6 +65,7 @@ FDamageEffectParams UAuraDamageGameplayAbility::MakeDamageEffectParamsFromClassD
 		}
 	}
 
+	// 死亡冲击
 	if (bOverrideDeathImpulse)
 	{
 		DeathImpulseDirectionOverride.Normalize();
@@ -74,6 +76,15 @@ FDamageEffectParams UAuraDamageGameplayAbility::MakeDamageEffectParamsFromClassD
 			DeathImpulseRotation.Pitch = PitchOverride;
 			Params.DeathImpulse = DeathImpulseRotation.Vector() * DeathImpulseMagnitude;
 		}
+	}
+
+	// 范围伤害参数
+	if (bIsRadialDamage)
+	{
+		Params.bIsRadialDamage = bIsRadialDamage;
+		Params.RadialDamageOrigin = InRadialDamageOrigin;
+		Params.RadialDamageInnerRadius = RadialDamageInnerRadius;
+		Params.RadialDamageOuterRadius = RadialDamageOuterRadius;
 	}
 
 	return Params;
