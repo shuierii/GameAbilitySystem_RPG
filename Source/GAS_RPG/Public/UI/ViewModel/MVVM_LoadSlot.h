@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MVVMViewModelBase.h"
+#include "Game/LoadScreenSaveGame.h"
 #include "MVVM_LoadSlot.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetWidgetSwitcherIndex, int32, WidgetSwitcherIndex);
@@ -19,18 +20,22 @@ class GAS_RPG_API UMVVM_LoadSlot : public UMVVMViewModelBase
 public:
 	void InitializeSlot();
 
+	FString GetPlayerName() const { return PlayerName; }
+
+	void SetPlayerName(FString InPlayerName);
+
 	UPROPERTY(BlueprintAssignable)
 	FSetWidgetSwitcherIndex SetWidgetSwitcherIndex;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, FieldNotify, Setter, Getter)
 	FString PlayerName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString MapName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 PlayerLevel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	FString LoadSlotName;
+
+	UPROPERTY()
+	int32 SlotIndex;
+
+	UPROPERTY()
+	TEnumAsByte<ESaveSlotStatus> SlotStatus;
 };

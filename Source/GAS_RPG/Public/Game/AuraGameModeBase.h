@@ -20,7 +20,8 @@ class GAS_RPG_API AAuraGameModeBase : public AGameModeBase
 
 public:
 	void SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex);
-
+	ULoadScreenSaveGame* GetSaveSlotData(const FString& SlotName, int32 SlotIndex) const;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Character Info")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 
