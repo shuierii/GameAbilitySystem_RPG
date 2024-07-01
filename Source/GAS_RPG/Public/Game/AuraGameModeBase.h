@@ -6,6 +6,8 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/GameModeBase.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
+#include "GameFramework/SaveGame.h"
+#include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "AuraGameModeBase.generated.h"
 
 /**
@@ -17,9 +19,14 @@ class GAS_RPG_API AAuraGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	void SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Character Info")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USaveGame> LoadScreenSaveGameClass;
 };
