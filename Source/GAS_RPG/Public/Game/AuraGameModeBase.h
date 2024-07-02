@@ -25,6 +25,8 @@ public:
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Character Info")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 
@@ -41,8 +43,11 @@ public:
 	TSoftObjectPtr<UWorld> DefaultMap;
 
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FString, TSoftObjectPtr<UWorld>> Maps;
+	FName DefaultPlayerStartTag;
 
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FString, TSoftObjectPtr<UWorld>> Maps;
+	
 protected:
 	virtual void BeginPlay() override;
 };
