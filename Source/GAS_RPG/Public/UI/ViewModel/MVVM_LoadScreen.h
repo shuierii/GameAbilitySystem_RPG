@@ -7,6 +7,8 @@
 #include "MVVM_LoadSlot.h"
 #include "MVVM_LoadScreen.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSlotSelected);
+
 /**
  * 
  */
@@ -30,7 +32,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SelectSlotButtonPressed(int32 Slot);
 
+	UFUNCTION(BlueprintCallable)
+	void DeleteButtonPressed();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayButtonPressed();
+
 	void LoadData();
+
+	UPROPERTY(BlueprintAssignable)
+	FSlotSelected SlotSelected;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UMVVM_LoadSlot> LoadSlotViewModelClass;
