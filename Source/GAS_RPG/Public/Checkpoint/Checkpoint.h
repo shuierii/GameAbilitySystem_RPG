@@ -5,20 +5,29 @@
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/PlayerStart.h"
+#include "Interaction/SaveInterface.h"
 #include "Checkpoint.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAS_RPG_API ACheckpoint : public APlayerStart
+class GAS_RPG_API ACheckpoint : public APlayerStart, public ISaveInterface
 {
 	GENERATED_BODY()
 
 public:
 	ACheckpoint(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(BlueprintReadOnly, SaveGame)
+	bool bReached = false;	// 是否点亮过
+
 protected:
+	//** SaveInterface */
+	virtual bool ShouldLoadTransform_Implementation() override;
+	virtual void LoadActor_Implementation() override;
+	//** End */
+
 	UFUNCTION()
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 

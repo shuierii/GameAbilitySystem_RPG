@@ -25,7 +25,10 @@ public:
 
 	ULoadScreenSaveGame* RetrieveInGameSaveData();
 	void SaveInGameProgressData(ULoadScreenSaveGame* SaveObject);
-	
+
+	void SaveWorldState(UWorld* World, const FString& DestinationMapAssetName = FString("")) const;
+	void LoadWorldState(UWorld* World) const;
+
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
