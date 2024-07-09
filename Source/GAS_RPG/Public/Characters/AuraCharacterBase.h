@@ -28,7 +28,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	
+
 	// 多播RPC
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
@@ -65,6 +65,8 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_Stunned();
+
+	void SetCharacterClass(ECharacterClass InClass) { CharacterClass = InClass; }
 
 protected:
 	virtual void BeginPlay() override;
