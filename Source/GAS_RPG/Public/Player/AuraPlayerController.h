@@ -11,8 +11,16 @@
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
 #include "Interaction/EnemyInterface.h"
+#include "Interaction/HighlightInterface.h"
 #include "UI/Widget/DamageTextComponent.h"
 #include "AuraPlayerController.generated.h"
+
+enum class ETargetingStatus:uint8
+{
+	TargetingEnemy,
+	TargetingNonEnemy,
+	NotTargeting
+};
 
 /**
  * 
@@ -33,7 +41,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void HideMagicCircle();
-	
+
 protected:
 	virtual void BeginPlay() override;
 	// 绑定输入Action
@@ -51,8 +59,10 @@ private:
 	void CursorTrace();
 	FHitResult CursorHit; // 鼠标碰撞
 
-	IEnemyInterface* LastActor;
-	IEnemyInterface* ThisActor;
+	TObjectPtr<AActor> LastActor;
+	TObjectPtr<AActor> ThisActor;
+	static void HighlightActor(AActor* InActor);
+	static void UnHighlightActor(AActor* InActor);
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ShiftAction;
@@ -78,7 +88,7 @@ private:
 	float FollowTime = 0.f; // 跟鼠标时间
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
-	bool bTargeting = false; // 是否选中对象（如NPC），选中则高亮，非选中则移动
+	ETargetingStatus TargetingStatus = ETargetingStatus::NotTargeting; // 是否选中对象（如NPC），选中则高亮，非选中则移动
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;
@@ -95,13 +105,13 @@ private:
 	/** 魔法阵Actor */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
-	
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AMagicCircle> MagicCircleClass;
 
 	UPROPERTY()
 	TObjectPtr<AMagicCircle> MagicCircle;
-	
-	void UpdateMagicCircleLocation();	// 魔法阵跟随鼠标位置
+
+	void UpdateMagicCircleLocation(); // 魔法阵跟随鼠标位置
 	/** End */
 };

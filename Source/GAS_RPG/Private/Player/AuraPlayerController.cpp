@@ -12,6 +12,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
+#include "Interaction/HighlightInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -123,8 +124,9 @@ void AAuraPlayerController::CursorTrace()
 {
 	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_CursorTrace))
 	{
-		if (LastActor) LastActor->UnHighlightActor();
-		if (ThisActor) ThisActor->UnHighlightActor();
+		UnHighlightActor(LastActor);
+		UnHighlightActor(ThisActor);
+
 		LastActor = nullptr;
 		ThisActor = nullptr;
 
@@ -136,18 +138,36 @@ void AAuraPlayerController::CursorTrace()
 	if (!CursorHit.bBlockingHit) return;
 
 	LastActor = ThisActor;
-	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
-
-	// 当前Actor不为空，高亮
-	if (ThisActor != nullptr)
+	if (IsValid(CursorHit.GetActor()) && CursorHit.GetActor()->Implements<UHighlightInterface>())
 	{
-		ThisActor->HighlightActor();
+		ThisActor = CursorHit.GetActor();
+	}
+	else
+	{
+		ThisActor = nullptr;
 	}
 
 	// 上一个Actor不为空且不等于当前Actor，关闭高亮
-	if (LastActor != nullptr && LastActor != ThisActor)
+	if (LastActor != ThisActor)
 	{
-		LastActor->UnHighlightActor();
+		UnHighlightActor(LastActor);
+		HighlightActor(ThisActor);
+	}
+}
+
+void AAuraPlayerController::HighlightActor(AActor* InActor)
+{
+	if (IsValid(InActor) && InActor->Implements<UHighlightInterface>())
+	{
+		IHighlightInterface::Execute_HighlightActor(InActor);
+	}
+}
+
+void AAuraPlayerController::UnHighlightActor(AActor* InActor)
+{
+	if (IsValid(InActor) && InActor->Implements<UHighlightInterface>())
+	{
+		IHighlightInterface::Execute_UnHighlightActor(InActor);
 	}
 }
 
@@ -160,8 +180,15 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag GameplayTag)
 
 	if (GameplayTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		bTargeting = ThisActor ? true : false;
-		bAutoRunning = false;
+		if (IsValid(ThisActor))
+		{
+			TargetingStatus = ThisActor->Implements<UEnemyInterface>() ? ETargetingStatus::TargetingEnemy : ETargetingStatus::TargetingNonEnemy;
+			bAutoRunning = false;
+		}
+		else
+		{
+			TargetingStatus = ETargetingStatus::NotTargeting;
+		}
 	}
 
 	if (GetASC()) GetASC()->AbilityInputTagPressed(GameplayTag);
@@ -183,7 +210,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 	if (GetASC() == nullptr) return;
 	GetASC()->AbilityInputTagReleased(GameplayTag);
 
-	if (!bTargeting && !bShiftPressed)
+	if (TargetingStatus != ETargetingStatus::TargetingEnemy && !bShiftPressed)
 	{
 		APawn* ControlledPawn = GetPawn<APawn>();
 		// 长按时间少于响应时间
@@ -215,7 +242,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 			}
 		}
 		FollowTime = 0.f;
-		bTargeting = false;
+		TargetingStatus = ETargetingStatus::NotTargeting;
 	}
 }
 
@@ -233,7 +260,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag GameplayTag)
 		return;
 	}
 
-	if (bTargeting || bShiftPressed)
+	if (TargetingStatus == ETargetingStatus::TargetingEnemy || bShiftPressed)
 	{
 		if (GetASC() == nullptr) return;
 		GetASC()->AbilityInputTagHeld(GameplayTag);

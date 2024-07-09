@@ -9,7 +9,7 @@
 #include "AuraEffectActor.generated.h"
 
 UENUM(BlueprintType)
-enum class EEffectApplicationPolicy
+enum class EEffectApplicationPolicy:uint8
 {
 	ApplyOnOverlap,
 	ApplyOnEndOverlap,
@@ -17,7 +17,7 @@ enum class EEffectApplicationPolicy
 };
 
 UENUM(BlueprintType)
-enum class EEffectRemovalPolicy
+enum class EEffectRemovalPolicy:uint8
 {
 	RemoveOnEndOverlap,
 	DoNotApply

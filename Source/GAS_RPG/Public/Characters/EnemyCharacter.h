@@ -17,17 +17,17 @@ class UBehaviorTree;
  * 
  */
 UCLASS()
-class GAS_RPG_API AEnemyCharacter : public AAuraCharacterBase, public IEnemyInterface
+class GAS_RPG_API AEnemyCharacter : public AAuraCharacterBase, public IEnemyInterface, public IHighlightInterface
 {
 	GENERATED_BODY()
 
 public:
 	AEnemyCharacter();
 	virtual void PossessedBy(AController* NewController) override;
-	//** enemy interface */
-	virtual void HighlightActor() override;
-	virtual void UnHighlightActor() override;
-	//** end enemy interface */
+	//** highlight interface */
+	virtual void HighlightActor_Implementation() override;
+	virtual void UnHighlightActor_Implementation() override;
+	//** end highlight interface */
 
 	//** combat interface */
 	virtual int32 GetPlayerLevel_Implementation() override;
@@ -59,7 +59,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
 

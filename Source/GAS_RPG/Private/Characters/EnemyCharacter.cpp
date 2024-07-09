@@ -48,7 +48,7 @@ void AEnemyCharacter::PossessedBy(AController* NewController)
 	}
 }
 
-void AEnemyCharacter::HighlightActor()
+void AEnemyCharacter::HighlightActor_Implementation()
 {
 	bHighlighted = true;
 
@@ -61,7 +61,7 @@ void AEnemyCharacter::HighlightActor()
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 }
 
-void AEnemyCharacter::UnHighlightActor()
+void AEnemyCharacter::UnHighlightActor_Implementation()
 {
 	bHighlighted = false;
 
