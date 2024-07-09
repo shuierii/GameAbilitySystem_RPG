@@ -27,6 +27,7 @@ public:
 	//** highlight interface */
 	virtual void HighlightActor_Implementation() override;
 	virtual void UnHighlightActor_Implementation() override;
+	virtual void SetMoveToLocation_Implementation(FVector& OutDestination) override;
 	//** end highlight interface */
 
 	//** combat interface */
@@ -35,9 +36,6 @@ public:
 	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
 	virtual AActor* GetCombatTarget_Implementation() const override;
 	//** end combat interface */
-
-	UPROPERTY(BlueprintReadOnly)
-	bool bHighlighted = false;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
 	FOnAttributeChangedSignature OnHealthChanged;

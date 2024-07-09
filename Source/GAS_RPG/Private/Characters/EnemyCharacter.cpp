@@ -30,6 +30,11 @@ AEnemyCharacter::AEnemyCharacter()
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
 
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+	GetMesh()->MarkRenderStateDirty();
+	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+	Weapon->MarkRenderStateDirty();
+
 	BaseWalkSpeed = 250.f;
 }
 
@@ -50,23 +55,22 @@ void AEnemyCharacter::PossessedBy(AController* NewController)
 
 void AEnemyCharacter::HighlightActor_Implementation()
 {
-	bHighlighted = true;
-
 	// 角色骨骼网格体
 	GetMesh()->SetRenderCustomDepth(true);
-	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 
 	// 武器骨骼网格体
 	Weapon->SetRenderCustomDepth(true);
-	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 }
 
 void AEnemyCharacter::UnHighlightActor_Implementation()
 {
-	bHighlighted = false;
-
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AEnemyCharacter::SetMoveToLocation_Implementation(FVector& OutDestination)
+{
+	// 需要自动移动到敌人位置
 }
 
 int32 AEnemyCharacter::GetPlayerLevel_Implementation()
@@ -144,7 +148,7 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	Super::StunTagChanged(CallbackTag, NewCount);
-	
+
 	if (AuraAIController && AuraAIController->GetBlackboardComponent())
 	{
 		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("Stunned"), bIsStunned);

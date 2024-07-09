@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/PlayerStart.h"
+#include "GAS_RPG/GAS_RPG.h"
+#include "Interaction/HighlightInterface.h"
 #include "Interaction/SaveInterface.h"
 #include "Checkpoint.generated.h"
 
@@ -12,7 +14,7 @@
  * 
  */
 UCLASS()
-class GAS_RPG_API ACheckpoint : public APlayerStart, public ISaveInterface
+class GAS_RPG_API ACheckpoint : public APlayerStart, public ISaveInterface, public IHighlightInterface
 {
 	GENERATED_BODY()
 
@@ -20,13 +22,19 @@ public:
 	ACheckpoint(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(BlueprintReadOnly, SaveGame)
-	bool bReached = false;	// 是否点亮过
+	bool bReached = false; // 是否点亮过
 
 protected:
-	//** SaveInterface */
+	/** SaveInterface */
 	virtual bool ShouldLoadTransform_Implementation() override;
 	virtual void LoadActor_Implementation() override;
-	//** End */
+	/** End */
+
+	/** HighlightInterface */
+	virtual void HighlightActor_Implementation() override;
+	virtual void UnHighlightActor_Implementation() override;
+	virtual void SetMoveToLocation_Implementation(FVector& OutDestination) override;
+	/** End */
 
 	UFUNCTION()
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -44,4 +52,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 CustomDepthStencilOverride = CUSTOM_DEPTH_TAN;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> MoveToComponent;
 };

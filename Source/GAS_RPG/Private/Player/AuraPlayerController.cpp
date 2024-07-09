@@ -216,6 +216,21 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 		// 长按时间少于响应时间
 		if (ControlledPawn && FollowTime <= ShortPressThreshold)
 		{
+			// 如果点击到物体，则向物体移动
+			if (IsValid(ThisActor) && ThisActor->Implements<UHighlightInterface>())
+			{
+				IHighlightInterface::Execute_SetMoveToLocation(ThisActor, CachedDestination);
+			}
+			// 非物体，则产生点击表现
+			else
+			{
+				if (GetASC() && !GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
+				{
+					// 点击特效
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
+				}
+			}
+			
 			// 获得角色到目标点的导航路径
 			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
 			{
@@ -226,7 +241,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 					// 保存路径点
 					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
 					// 绘制路径 ，客户端中显示需要在项目设置导航中勾选客户端导航
-					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+					// DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
 				}
 
 				if (NavPath->PathPoints.Num() > 0)
@@ -234,11 +249,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag GameplayTag)
 					CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1]; // 最后一个点作为目标点
 					bAutoRunning = true;
 				}
-			}
-			if (GetASC() && !GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_InputPressed))
-			{
-				// 点击特效
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ClickNiagaraSystem, CachedDestination);
 			}
 		}
 		FollowTime = 0.f;
