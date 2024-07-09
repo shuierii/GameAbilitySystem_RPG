@@ -21,8 +21,11 @@ class GAS_RPG_API ACheckpoint : public APlayerStart, public ISaveInterface, publ
 public:
 	ACheckpoint(const FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(BlueprintReadOnly, SaveGame)
+	UPROPERTY(BlueprintReadWrite, SaveGame)
 	bool bReached = false; // 是否点亮过
+
+	UPROPERTY(EditAnywhere)
+	bool bBindOverlapCallback = true;
 
 protected:
 	/** SaveInterface */

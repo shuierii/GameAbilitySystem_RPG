@@ -28,6 +28,7 @@ public:
 
 	void SaveWorldState(UWorld* World, const FString& DestinationMapAssetName = FString("")) const;
 	void LoadWorldState(UWorld* World) const;
+	FString GetMapNameFromMapAssetName(const FString& MapAssetName) const;
 
 	void TravelToMap(UMVVM_LoadSlot* Slot);
 

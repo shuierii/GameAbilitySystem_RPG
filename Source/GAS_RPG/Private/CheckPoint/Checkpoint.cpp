@@ -82,6 +82,10 @@ void ACheckpoint::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(bBindOverlapCallback)
+	{
+		
+	}
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ACheckpoint::OnSphereOverlap);
 }
 
