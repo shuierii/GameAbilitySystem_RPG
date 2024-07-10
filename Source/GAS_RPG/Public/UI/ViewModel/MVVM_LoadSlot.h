@@ -26,12 +26,12 @@ public:
 	FString GetMapName() const { return MapName; }
 	int32 GetPlayerLevel() const { return PlayerLevel; }
 	FString GetLoadSlotName() const { return LoadSlotName; }
-	
+
 	void SetPlayerName(FString InPlayerName);
 	void SetMapName(FString InMapName);
 	void SetPlayerLevel(int32 InLevel);
 	void SetLoadSlotName(FString InLoadSlotName);
-	
+
 	UPROPERTY(BlueprintAssignable)
 	FSetWidgetSwitcherIndex SetWidgetSwitcherIndex;
 	UPROPERTY(BlueprintAssignable)
@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY()
 	FName PlayerStartTag;
+
+	UPROPERTY()
+	FString MapAssetName;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, FieldNotify, Setter, Getter, meta = (AllowPrivateAccess="true"))

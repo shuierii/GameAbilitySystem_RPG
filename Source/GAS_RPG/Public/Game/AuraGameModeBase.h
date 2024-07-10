@@ -34,6 +34,8 @@ public:
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
+	void PlayerDied(ACharacter* DeadCharacter);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Character Info")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 

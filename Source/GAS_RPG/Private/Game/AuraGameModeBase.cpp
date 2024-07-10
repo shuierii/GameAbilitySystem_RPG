@@ -9,6 +9,7 @@
 #include "Game/LoadScreenSaveGame.h"
 #include "Interaction/SaveInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 
 void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
@@ -23,6 +24,7 @@ void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame->SaveSlotStatus = Taken;
 	LoadScreenSaveGame->MapName = LoadSlot->GetMapName();
 	LoadScreenSaveGame->PlayerStartTag = LoadSlot->PlayerStartTag;
+	LoadScreenSaveGame->MapAssetName = LoadSlot->MapAssetName;
 
 	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame, LoadSlot->GetLoadSlotName(), SlotIndex);
 }
@@ -224,6 +226,15 @@ AActor* AAuraGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 	}
 
 	return nullptr;
+}
+
+void AAuraGameModeBase::PlayerDied(ACharacter* DeadCharacter)
+{
+	ULoadScreenSaveGame* SaveGame = RetrieveInGameSaveData();
+	if (!IsValid(SaveGame))return;
+
+	// 死亡之后重新打开当前关卡，即重生到存档时的数据
+	UGameplayStatics::OpenLevel(DeadCharacter, FName(SaveGame->MapAssetName));
 }
 
 void AAuraGameModeBase::BeginPlay()

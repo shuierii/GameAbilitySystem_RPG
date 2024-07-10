@@ -153,7 +153,7 @@ FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGamepl
 	if (MontageTag.MatchesTagExact(FAuraGameplayTags::Get().CombatSocket_Tail))
 		return Weapon->GetSocketLocation(TailTipSocketName);
 
-	return FVector();
+	return FVector();\
 }
 
 bool AAuraCharacterBase::IsDead_Implementation()

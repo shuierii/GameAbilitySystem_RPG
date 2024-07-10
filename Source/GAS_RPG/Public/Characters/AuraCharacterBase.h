@@ -116,6 +116,7 @@ protected:
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 	/** END */
 
+	UPROPERTY(BlueprintReadOnly)
 	bool bDead = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
