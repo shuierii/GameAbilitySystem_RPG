@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AAuraEffectActor::AAuraEffectActor()
 {
@@ -14,9 +15,24 @@ AAuraEffectActor::AAuraEffectActor()
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
 
+void AAuraEffectActor::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	RunningTime += DeltaSeconds;
+	float SinePeriod = 2 * PI / SinePeriodConstant;
+	if (RunningTime > SinePeriod)
+	{
+		RunningTime = 0.f;
+	}
+	ItemMovement(DeltaSeconds);
+}
+
 void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
+	InitialLocation = GetActorLocation();
+	CalculatedLocation = InitialLocation;
+	CalculatedRotation = GetActorRotation();
 }
 
 void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
@@ -42,7 +58,10 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	}
 
 	// 销毁
-	if (bDestroyOnEffectApplication && EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy != EGameplayEffectDurationType::Infinite)
+	if (bDestroyOnEffectApplication && EffectSpecHandle
+	                                   .
+	                                   Data.Get()->Def.Get()->DurationPolicy != EGameplayEffectDurationType::Infinite
+	)
 	{
 		Destroy();
 	}
@@ -112,5 +131,32 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 		{
 			ActiveEffectHandleMap.FindAndRemoveChecked(handle);
 		}
+	}
+}
+
+void AAuraEffectActor::StartSinMovement()
+{
+	bSinMovement = true;
+	InitialLocation = GetActorLocation();
+	CalculatedLocation = InitialLocation;
+}
+
+void AAuraEffectActor::StartSinRotation()
+{
+	bRotates = true;
+	CalculatedRotation = GetActorRotation();
+}
+
+void AAuraEffectActor::ItemMovement(float DeltaTime)
+{
+	if (bRotates)
+	{
+		const FRotator DeltaRotation(0.f, DeltaTime * RotationRate, 0.f);
+		CalculatedRotation = UKismetMathLibrary::ComposeRotators(CalculatedRotation, DeltaRotation);
+	}
+	if (bSinMovement)
+	{
+		const float Sine = SineAmplitude * FMath::Sin(RunningTime * SinePeriodConstant);
+		CalculatedLocation = InitialLocation + FVector(0.f, 0.f, Sine);
 	}
 }

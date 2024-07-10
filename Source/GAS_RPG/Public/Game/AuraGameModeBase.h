@@ -6,6 +6,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/GameModeBase.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
+#include "AbilitySystem/Data/LootTiers.h"
 #include "GameFramework/SaveGame.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "AuraGameModeBase.generated.h"
@@ -56,6 +57,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FString, TSoftObjectPtr<UWorld>> Maps;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Loot Tiers")
+	TObjectPtr<ULootTiers> LootTiers;
 
 protected:
 	virtual void BeginPlay() override;

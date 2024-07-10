@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Data/CharacterClassInfo.h"
+#include "Data/LootTiers.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UI/HUD/AuraHUD.h"
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
@@ -52,6 +53,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults", meta = (DefaultToSelf = "WorldContextObject"))
+	static ULootTiers* GetLootTiers(const UObject* WorldContextObject);
 
 	/*
 	 * Effect Context [AbilityTypes]
